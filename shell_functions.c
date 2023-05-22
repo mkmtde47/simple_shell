@@ -1,5 +1,5 @@
 #include "main.h"
-
+extern char **environ;
 char *read_input()
 {
 	char *buffer = NULL;

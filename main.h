@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/wait.h>
-extern char **environ;
 int shell();
 char *read_input(void);
 char **process_args(char *args);
