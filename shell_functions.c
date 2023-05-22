@@ -50,24 +50,27 @@ char **process_args(char *args)
 
 int execute(char **tokens)
 {
-	int i = 0;
 	pid_t pid, wpid;
 	int status;
 	char **envp = environ;
+	char *path;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		printf("command: %s\n", *tokens);
-		if (execve(*tokens, tokens, envp) == -1)
+		path = findpath(*tokens);
+		if (path != NULL)
 		{
-			perror("MKsh");
+			if (execve(path, tokens, envp) == -1)
+			{
+				perror("hsh");
+			}
 		}
 		exit(EXIT_FAILURE);
 	}
 	else if (pid < 0)
 	{
-		perror("MKsh");
+		perror("hsh");
 	}
 	else
 	{

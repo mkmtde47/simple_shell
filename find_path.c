@@ -1,16 +1,17 @@
 #include "main.h"
 
+
 char *findpath(char *command)
 {
-	char **environ;
+	char **env = environ;
 	char *path;
 	char *path2;
 	char *cwd;
-	while (*environ != NULL)
+	while (*env != NULL)
 	{
-		if (strncmp(*environ, "PATH=", 5) == 0)
+		if (strncmp(*env, "PATH=", 5) == 0)
 		{
-			path = *environ + 5;
+			path = *env + 5;
 			while ((cwd = strtok(path, ":")) != NULL)
 			{
 				path2 = malloc(strlen(cwd) + strlen(command) + 1);
@@ -23,7 +24,7 @@ char *findpath(char *command)
 			}
 		}
 		printf("%s\n", path2);
-		environ++;
+		env++;
 	}
 	return (NULL);
 }

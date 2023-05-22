@@ -1,6 +1,6 @@
 #include "main.h"
 
-int main(int ac, char **av)
+int main()
 {
 	shell();
 	return (0);
