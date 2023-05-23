@@ -8,9 +8,15 @@ char *read_input()
 	char s = ' ';
 	ssize_t nread;
 	size_t len = 0;
+	int mode;
 
-	write(1, &c, 1);
-	write(1, &s, 1);
+	mode = isatty(STDIN_FILENO);
+
+	if (mode == 1)
+	{
+		write(1, &c, 1);
+		write(1, &s, 1);
+	}
 	nread = getline(&buffer, &len, stdin);
 	if (nread == -1)
 	{
@@ -31,7 +37,7 @@ char **process_args(char *args)
 	char *token;
 	int i = 0;
 	char **token_list;
-	 char *delim = " \t\r\n\v";
+	char *delim = " \n";
 
 	/*WE CAN ASLO USE LINKED LISTS INSTEAD*/
 	token_list = malloc(sizeof(char *) * 64);
