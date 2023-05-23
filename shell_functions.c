@@ -1,4 +1,5 @@
 #include "main.h"
+extern char **environ;
 
 char *read_input()
 {
@@ -30,17 +31,18 @@ char **process_args(char *args)
 	char *token;
 	int i = 0;
 	char **token_list;
+	 char *delim = " \t\r\n\v";
 
 	/*WE CAN ASLO USE LINKED LISTS INSTEAD*/
 	token_list = malloc(sizeof(char *) * 64);
 	if (token_list == NULL)
 		return (NULL);
 
-	token = strtok(args, " ");
+	token = strtok(args, delim);
 	while (token != NULL)
 	{
 		token_list[i] = token;
-		token = strtok(NULL, " ");
+		token = strtok(NULL, delim);
 		i++;
 	}
 	token_list[i] = NULL;
@@ -48,34 +50,24 @@ char **process_args(char *args)
 	return (token_list);
 }
 
-int execute(char **tokens)
-{
-	int i = 0;
-	pid_t pid, wpid;
-	int status;
-	char **envp = environ;
+int execute(char **tokens) {
+    pid_t pid, wpid;
+    int status;
 
-	pid = fork();
-	if (pid == 0)
-	{
-		printf("command: %s\n", *tokens);
-		if (execve(*tokens, tokens, envp) == -1)
-		{
-			perror("MKsh");
-		}
-		exit(EXIT_FAILURE);
-	}
-	else if (pid < 0)
-	{
-		perror("MKsh");
-	}
-	else
-	{
-		do
-		{
-			wpid = waitpid(pid, &status, WUNTRACED);
-		}
-		while (!WIFEXITED(status) && !WIFSIGNALED(status));
-	}
-	return (0);
+    pid = fork();
+    if (pid == 0) {
+        if (execve(tokens[0], tokens, NULL) == -1) {
+            perror("MKsh");
+            printf("errno: %d\n", errno);
+            exit(EXIT_FAILURE);
+        }
+    } else if (pid < 0) {
+        perror("MKsh");
+    } else {
+        do {
+            wpid = waitpid(pid, &status, WUNTRACED);
+        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+    }
+
+    return 0;
 }
