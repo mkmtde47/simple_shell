@@ -56,40 +56,32 @@ char **process_args(char *args)
 	return (token_list);
 }
 
-int execute(char **tokens) {
-    pid_t pid;
-    int status;
-
-    pid = fork();
-    if (pid == 0) {
-        if (execve(tokens[0], tokens, NULL) == -1) {
-            perror("MKsh");
-            printf("errno: %d\n", errno);
-            exit(EXIT_FAILURE);
-        }
-    } else if (pid < 0) {
-        perror("MKsh");
-    } else {
-        do {
-            waitpid(pid, &status, WUNTRACED);
-        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-    }
-
-    return 0;
-}
-
-void execute_cmd(char **argv)
+int execute(char **tokens)
 {
-	char *cmd = NULL;
-	char *cmd_a = NULL;
+	pid_t pid;
+	int status;
 
-	if (argv)
+	pid = fork();
+	if (pid == 0)
 	{
-		cmd = argv[0];
-		cmd_a = get_path(cmd);
-		if (execve(cmd_a, argv, NULL) == -1)
+		if (execve(tokens[0], tokens, NULL) == -1)
 		{
-			perror("ERROR:");
+			perror("MKsh");
+			printf("errno: %d\n", errno);
+			exit(EXIT_FAILURE);
 		}
 	}
+	else if (pid < 0)
+	{
+		perror("MKsh");
+	}
+	else
+	{
+		do
+		{
+			waitpid(pid, &status, WUNTRACED);
+		}
+		while (!WIFEXITED(status) && !WIFSIGNALED(status));
+	}
+	return 0;
 }

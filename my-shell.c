@@ -9,8 +9,7 @@ int shell(void)
 	{
 		args = read_input();
 		tokens = process_args(args);
-		/*execute(tokens);*/
-		execute_cmd(tokens);
+		execute(tokens);
 	}
 	return (0);
 }
