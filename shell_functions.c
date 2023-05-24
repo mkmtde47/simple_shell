@@ -57,7 +57,7 @@ char **process_args(char *args)
 }
 
 int execute(char **tokens) {
-    pid_t pid, wpid;
+    pid_t pid;
     int status;
 
     pid = fork();
@@ -71,9 +71,25 @@ int execute(char **tokens) {
         perror("MKsh");
     } else {
         do {
-            wpid = waitpid(pid, &status, WUNTRACED);
+            waitpid(pid, &status, WUNTRACED);
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
     }
 
     return 0;
+}
+
+void execute_cmd(char **argv)
+{
+	char *cmd = NULL;
+	char *cmd_a = NULL;
+
+	if (argv)
+	{
+		cmd = argv[0];
+		cmd_a = get_path(cmd);
+		if (execve(cmd_a, argv, NULL) == -1)
+		{
+			perror("ERROR:");
+		}
+	}
 }
