@@ -1,5 +1,10 @@
 #include "main.h"
 
+/**
+ * shell - loop of shell
+ * Return: void
+ */
+
 int shell(void)
 {
 	char *args;

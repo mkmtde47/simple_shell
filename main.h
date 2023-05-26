@@ -8,7 +8,7 @@
 #include <errno.h>
 #include <sys/wait.h>
 extern char **environ;
-int shell();
+int shell(void);
 char *read_input(void);
 char **process_args(char *args);
 int execute(char **tokens);

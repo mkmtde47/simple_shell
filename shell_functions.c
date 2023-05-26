@@ -1,5 +1,9 @@
 #include "main.h"
-extern char **environ;
+
+/**
+ * read_input - read input
+ * Return: void
+ */
 
 char *read_input()
 {
@@ -32,6 +36,12 @@ char *read_input()
 	return (buffer);
 }
 
+/**
+ * process_args - parse
+ * @args: argument
+ * Return: void
+ */
+
 char **process_args(char *args)
 {
 	char *token;
@@ -55,7 +65,11 @@ char **process_args(char *args)
 	i = 0;
 	return (token_list);
 }
-
+/**
+ * execute - execute
+ * @tokens: parsed tokens
+ * Return: void
+ */
 int execute(char **tokens)
 {
 	pid_t pid;
@@ -77,11 +91,9 @@ int execute(char **tokens)
 	}
 	else
 	{
-		do
-		{
+		do {
 			waitpid(pid, &status, WUNTRACED);
-		}
-		while (!WIFEXITED(status) && !WIFSIGNALED(status));
+		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
-	return 0;
+	return (0);
 }
